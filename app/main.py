@@ -1,6 +1,13 @@
 from fastapi import FastAPI
-from app.routers import user
+from app.api.routes import auth
+from app.db.session import Base, engine
 
 app = FastAPI()
 
-app.include_router(user.router)
+Base.metadata.create_all(bind=engine)
+
+app.include_router(auth.router)
+
+@app.get("/")
+def root():
+    return {"message": "API работает"}
